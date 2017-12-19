@@ -111,7 +111,7 @@ func dataSourceAwsS3BucketObjectRead(d *schema.ResourceData, meta interface{}) e
 	bucket := d.Get("bucket").(string)
 	key := d.Get("key").(string)
 
-	input := s3.HeadObjectInput{
+	input := &s3.HeadObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(key),
 	}
@@ -130,7 +130,7 @@ func dataSourceAwsS3BucketObjectRead(d *schema.ResourceData, meta interface{}) e
 	}
 
 	log.Printf("[DEBUG] Reading S3 Bucket Object: %s", input)
-	out, err := conn.HeadObject(&input)
+	out, err := conn.HeadObject(input)
 	if err != nil {
 		return fmt.Errorf("Failed getting S3 object: %s Bucket: %q Object: %q", err, bucket, key)
 	}
